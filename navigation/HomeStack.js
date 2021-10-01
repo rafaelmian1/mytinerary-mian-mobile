@@ -26,15 +26,15 @@ const HomeStack = () => {
             title: "Cities",
             headerTitle: "Explore all our Cities!",
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
-                <Pressable
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                >
+              <Pressable
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <View style={{ marginRight: 20 }}>
                   <AntDesign name="back" size={24} color="black" />
-                </Pressable>
-              </View>
+                </View>
+              </Pressable>
             ),
           };
         }}

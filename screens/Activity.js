@@ -4,11 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 const Activity = () => {
   return (
     <View>
-<<<<<<< HEAD
       <Text>ActivityRafa</Text>
-=======
       <Text>ActivityNico</Text>
->>>>>>> nico
     </View>
   );
 };

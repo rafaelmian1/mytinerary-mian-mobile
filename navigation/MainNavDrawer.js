@@ -18,7 +18,7 @@ const NavigatorDrawer = () => {
         options={{
           title: "Home",
           headerStyle: {
-            height: 75,
+            height: 80,
           },
         }}
       />
@@ -29,16 +29,19 @@ const NavigatorDrawer = () => {
           return {
             title: "Cities",
             headerTitle: "Explore all our Cities!",
+            headerStyle: {
+              height: 80,
+            },
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
-                <Pressable
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                >
+              <Pressable
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <View style={{ marginHorizontal: 20 }}>
                   <AntDesign name="back" size={24} color="black" />
-                </Pressable>
-              </View>
+                </View>
+              </Pressable>
             ),
           };
         }}
@@ -50,8 +53,11 @@ const NavigatorDrawer = () => {
           return {
             title: "Sign Up",
             headerTitle: "Create an account!",
+            headerStyle: {
+              height: 80,
+            },
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
+              <View style={{ marginHorizontal: 20 }}>
                 <Pressable
                   onPress={() => {
                     navigation.goBack();
@@ -71,8 +77,11 @@ const NavigatorDrawer = () => {
           return {
             title: "Sign In",
             headerTitle: "Welcome back!",
+            headerStyle: {
+              height: 80,
+            },
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
+              <View style={{ marginHorizontal: 20 }}>
                 <Pressable
                   onPress={() => {
                     navigation.goBack();

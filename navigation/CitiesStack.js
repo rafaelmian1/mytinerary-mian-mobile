@@ -29,15 +29,15 @@ const CitiesStack = (props) => {
           return {
             title: "Itineraries",
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
-                <Pressable
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                >
+              <Pressable
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <View style={{ marginRight: 20 }}>
                   <AntDesign name="back" size={24} color="black" />
-                </Pressable>
-              </View>
+                </View>
+              </Pressable>
             ),
           };
         }}
@@ -49,15 +49,15 @@ const CitiesStack = (props) => {
           return {
             title: "Activity bla",
             headerLeft: () => (
-              <View style={{ marginHorizontal: 10 }}>
-                <Pressable
-                  onPress={() => {
-                    navigation.goBack();
-                  }}
-                >
+              <Pressable
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
+                <View style={{ marginRight: 20 }}>
                   <AntDesign name="back" size={24} color="black" />
-                </Pressable>
-              </View>
+                </View>
+              </Pressable>
             ),
           };
         }}

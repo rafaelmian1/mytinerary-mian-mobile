@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -8,18 +8,24 @@ import {
   Dimensions,
   View,
   Button,
-  Pressable,
 } from "react-native";
 import { connect } from "react-redux";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import Carousel from "react-native-snap-carousel";
 import carouselActions from "../redux/actions/carouselActions";
+import Slide from "./Slide";
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 
 const Home = (props) => {
   const [loaded] = useFonts({
     Lato: require("../assets/Lato-Light.ttf"),
   });
+
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     props.slides.length === 0 && props.getSlides(props);
@@ -34,6 +40,7 @@ const Home = (props) => {
     props.slides.length !== 0
       ? [...props.slides[0], ...props.slides[1], ...props.slides[2]]
       : [];
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -53,42 +60,47 @@ const Home = (props) => {
                 their cities!
               </Text>
             </View>
-            <Button
+
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor="white"
+              style={styles.buttonContainer}
               onPress={() => {
                 props.navigation.push("citiesStack", { bool: true });
               }}
-              title="Explore"
-              color="#841584"
-              accessibilityLabel="Learn more about this purple button"
-            />
+            >
+              <Text style={styles.button}>Explore</Text>
+            </TouchableHighlight>
           </View>
         </ImageBackground>
+
+        <View style={{ alignItems: "center", marginTop: 15 }}>
+          <Text style={{ ...styles.brand, fontSize: 40 }}>
+            Popular MyTineraries
+          </Text>
+        </View>
         {props.slides.length !== 0 && (
-          <Carousel
-            layout={"default"}
-            data={data}
-            renderItem={({ item }) => {
-              return (
-                <Pressable onPress={() => props.navigation.push("itineraries")}>
-                  <View style={styles.ImageBackground}>
-                    <ImageBackground
-                      source={{
-                        uri:
-                          "https://my-tinerary-mian.herokuapp.com" +
-                          item.img[0],
-                      }}
-                      style={styles.slide}
-                      resizeMode="cover"
-                    >
-                      <Text style={styles.brand}>{item.city}</Text>
-                    </ImageBackground>
-                  </View>
-                </Pressable>
-              );
-            }}
-            sliderWidth={Dimensions.get("window").width}
-            itemWidth={Dimensions.get("window").width * 0.7}
-          />
+          <View style={styles.container}>
+            <Carousel
+              ref={carouselRef}
+              layout={"default"}
+              layoutCardOffset={18}
+              hasParallaxImages={true}
+              data={data}
+              renderItem={({ item, index }, parallaxProps) => {
+                return (
+                  <Slide
+                    item={item}
+                    index={index}
+                    parallaxProps={parallaxProps}
+                  />
+                );
+              }}
+              sliderHeight={Dimensions.get("window").width}
+              sliderWidth={Dimensions.get("window").width}
+              itemWidth={Dimensions.get("window").width - 60}
+            />
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -107,7 +119,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   ImageBackground: {
-    height: Dimensions.get("window").height - 75,
+    height: Dimensions.get("window").height - 80,
     width: Dimensions.get("window").width,
   },
   brandContainer: {
@@ -122,12 +134,30 @@ const styles = StyleSheet.create({
   brand: {
     fontFamily: "Lato",
     fontSize: 75,
-    fontWeight: "500",
-    color: "white",
+    color: "#e6e1dd",
     textShadowColor: "black",
     textShadowOffset: { height: 2, width: 2 },
     textShadowRadius: 5,
   },
-  slide: {},
-  title: {},
+  container: {
+    flex: 1,
+    marginVertical: 30,
+  },
+  buttonContainer: {
+    width: 200,
+    padding: 10,
+    marginLeft: "15%",
+    marginTop: 30,
+    backgroundColor: "#e6e1dd",
+    borderRadius: 25,
+    borderStyle: "solid",
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  button: {
+    color: "black",
+    fontFamily: "Lato",
+    fontSize: 40,
+    textAlign: "center",
+  },
 });
