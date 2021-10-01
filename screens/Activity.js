@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 const Activity = () => {
   return (
     <View>
-      <Text>Activity</Text>
+      <Text>ActivityRafa</Text>
     </View>
   );
 };
