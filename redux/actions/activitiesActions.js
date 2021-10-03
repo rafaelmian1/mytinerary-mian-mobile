@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const activitiesActions = {
   getActivities: (id) => {
@@ -13,16 +12,21 @@ const activitiesActions = {
         return response.data.success;
       } catch (err) {
         console.error(err);
-        toast.error("We're doing some maintenance, please try later!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        });
+        // toast.error("We're doing some maintenance, please try later!", {
+        //   position: "top-right",
+        //   autoClose: 2000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: false,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
       }
+    };
+  },
+  setComments: (comments) => {
+    return (dispatch) => {
+      dispatch({ type: "SET_COMMENTS", payload: comments });
     };
   },
 };

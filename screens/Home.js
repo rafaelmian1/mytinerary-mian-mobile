@@ -7,18 +7,14 @@ import {
   Text,
   Dimensions,
   View,
-  Button,
 } from "react-native";
 import { connect } from "react-redux";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import Carousel from "react-native-snap-carousel";
 import carouselActions from "../redux/actions/carouselActions";
-import Slide from "./Slide";
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import Slide from "../components/Slide";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 const Home = (props) => {
   const [loaded] = useFonts({
@@ -93,6 +89,7 @@ const Home = (props) => {
                     item={item}
                     index={index}
                     parallaxProps={parallaxProps}
+                    navigation={props.navigation}
                   />
                 );
               }}
@@ -119,7 +116,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
 const styles = StyleSheet.create({
   ImageBackground: {
-    height: Dimensions.get("window").height - 80,
+    height: Dimensions.get("window").height - 150,
     width: Dimensions.get("window").width,
   },
   brandContainer: {

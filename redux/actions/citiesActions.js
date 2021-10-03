@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const citiesActions = {
   getCities: (props) => {
@@ -13,17 +12,17 @@ const citiesActions = {
         }
         dispatch({ type: "GET_CITIES", payload: response.data.response });
       } catch (err) {
-        toast.error("We're doing some maintenance, please try later!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        });
+        // toast.error("We're doing some maintenance, please try later!", {
+        //   position: "top-right",
+        //   autoClose: 2000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: false,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
         console.error(err.message);
-        props.history.push("/error");
+        // props.history.push("/error");
       }
     };
   },
@@ -39,17 +38,17 @@ const citiesActions = {
         }
         dispatch({ type: "GET_CITY", payload: response.data.response });
       } catch (err) {
-        toast.error("We're doing some maintenance, please try later!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        });
+        // toast.error("We're doing some maintenance, please try later!", {
+        //   position: "top-right",
+        //   autoClose: 2000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: false,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
         console.error(err.message);
-        props.history.push("/error");
+        // props.history.push("/error");
       }
     };
   },

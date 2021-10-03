@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Text, View, Pressable, StyleSheet, Dimensions } from "react-native";
 import { ParallaxImage } from "react-native-snap-carousel";
 
-const Slide = ({ item, index, parallaxProps }) => {
+const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
   const [indice, setIndice] = useState(0);
   const interval = useRef(null);
   const [loop, setLoop] = useState(false);
@@ -15,12 +15,44 @@ const Slide = ({ item, index, parallaxProps }) => {
     }
     return () => clearTimeout(interval.current);
   });
+  if (activity) {
+    return (
+      <Pressable
+        key={"slide" + index}
+        onLongPress={() => setLoop(true)}
+        onPressOut={() => setLoop(false)}
+      >
+        <View style={styles.item}>
+          <ParallaxImage
+            source={{
+              uri: "https://my-tinerary-mian.herokuapp.com" + item.img,
+            }}
+            containerStyle={styles.imageContainer}
+            style={styles.image}
+            parallaxFactor={0.4}
+            {...parallaxProps}
+          />
+          {!loop && (
+            <View style={styles.textContainer}>
+              <Text style={styles.brand} numberOfLines={2}>
+                {item.name}
+              </Text>
+              <Text style={{ ...styles.brand, fontSize: 20 }} numberOfLines={2}>
+                {item.description}
+              </Text>
+            </View>
+          )}
+        </View>
+      </Pressable>
+    );
+  }
   return (
     <Pressable
       onPress={() => {
-        props.navigation.navigate("citiesStack", {
+        navigation.navigate("citiesStack", {
           screen: "itineraries",
           bool: true,
+          city: item,
         });
       }}
       key={"slide" + index}
