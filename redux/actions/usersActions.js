@@ -1,10 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-// import { toast } from "react-toastify";
-// import Swal from "sweetalert2";
+import Toast from "react-native-toast-message";
 
 const usersActions = {
-  signUp: (data) => {
+  signUp: (data, props) => {
     return async (dispatch) => {
       try {
         let response = await axios.post(
@@ -12,44 +11,40 @@ const usersActions = {
           data
         );
         if (response.data.success) {
-          // Swal.fire({
-          //   position: "top-end",
-          //   icon: "success",
-          //   title: "Signed up successfully",
-          //   showConfirmButton: true,
-          //   timer: 1000,
-          // });
+          props.navigation.navigate("home");
+          Toast.show({
+            type: "success",
+            text1: "Welcome to MyTinerary " + response.data.user.first_name,
+            text2: "Enjoy our content!",
+            topOffset: 100,
+            onPress: () => Toast.hide(),
+          });
           dispatch({ type: "LOGGED_IN", payload: response.data });
         } else {
-          // response.data.error.forEach((err) => {
-          //   toast.error(err.message, {
-          //     position: "top-right",
-          //     autoClose: 5000,
-          //     hideProgressBar: false,
-          //     closeOnClick: true,
-          //     pauseOnHover: true,
-          //     draggable: true,
-          //     progress: undefined,
-          //   });
-          // });
+          Toast.show({
+            type: "error",
+            text1: "Oops!",
+            text2: response.data.error[0].message,
+            topOffset: 100,
+            onPress: () => Toast.hide(),
+          });
+
           return response.data.error;
         }
       } catch (err) {
         console.error(err);
-        // toast.error("We're doing some maintenance, please try later!", {
-        //   position: "top-right",
-        //   autoClose: 2000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: false,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "We're doing some maintenance, please try later!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
       }
     };
   },
 
-  logIn: (data) => {
+  logIn: (data, props) => {
     return async (dispatch) => {
       try {
         let response = await axios.post(
@@ -57,41 +52,37 @@ const usersActions = {
           data
         );
         if (response.data.success) {
-          // Swal.fire({
-          //   position: "top-end",
-          //   icon: "success",
-          //   title: "Welcome " + response.data.user.first_name,
-          //   showConfirmButton: false,
-          //   timer: 1500,
-          // });
+          console.log(props.navigation);
+          props.navigation.navigate("home");
+          Toast.show({
+            type: "success",
+            text1: "Welcome " + response.data.user.first_name,
+            text2: "We missed you! 👋",
+            topOffset: 100,
+            onPress: () => Toast.hide(),
+          });
+
           dispatch({ type: "LOGGED_IN", payload: response.data });
         } else {
-          // toast.error(
-          //   response.data.response.includes("Google")
-          //     ? response.data.response
-          //     : "Email and/or password incorrect",
-          //   {
-          //     position: "top-right",
-          //     autoClose: 4000,
-          //     hideProgressBar: false,
-          //     closeOnClick: true,
-          //     pauseOnHover: false,
-          //     draggable: true,
-          //     progress: undefined,
-          //   }
-          // );
+          Toast.show({
+            type: "error",
+            text1: "Oops!",
+            text2: response.data.response.includes("Google")
+              ? response.data.response
+              : "Email and/or password incorrect",
+            topOffset: 100,
+            onPress: () => Toast.hide(),
+          });
         }
       } catch (err) {
         console.error(err);
-        // toast.error("We're doing some maintenance, please try later!", {
-        //   position: "top-right",
-        //   autoClose: 2000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: false,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "We're doing some maintenance, please try later!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
       }
     };
   },
@@ -112,13 +103,13 @@ const usersActions = {
         );
         return { success: true };
       } catch (err) {
-        // Swal.fire({
-        //   icon: "error",
-        //   title: "Oops...",
-        //   text: "Session timed out",
-        //   footer: '<a href="">Why do I have this issue?</a>',
-        // });
-
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "Session timed out!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
         dispatch({ type: "RESET_USER" });
       }
     };
@@ -158,12 +149,13 @@ const usersActions = {
           });
         return { success: true };
       } catch (err) {
-        // Swal.fire({
-        //   icon: "error",
-        //   title: "Oops...",
-        //   text: "Session timed out",
-        //   footer: '<a href="">Why do I have this issue?</a>',
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "Session timed out!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
 
         dispatch({ type: "RESET_USER" });
       }
@@ -186,12 +178,13 @@ const usersActions = {
         );
         return response.data.id;
       } catch (err) {
-        // Swal.fire({
-        //   icon: "error",
-        //   title: "Oops...",
-        //   text: "Session timed out",
-        //   footer: '<a href="">Why do I have this issue?</a>',
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "Session timed out!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
         dispatch({ type: "RESET_USER" });
       }
     };
@@ -199,23 +192,22 @@ const usersActions = {
 
   resetUser: () => {
     return (dispatch) => {
-      // toast.info("Hope to see you soon!", {
-      //   position: "top-right",
-      //   autoClose: 2000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: false,
-      //   draggable: true,
-      //   progress: undefined,
-      // });
+      Toast.show({
+        type: "info",
+        text1: "Good bye!",
+        text2: "Hope to see you soon!",
+        topOffset: 100,
+        onPress: () => Toast.hide(),
+      });
       dispatch({ type: "RESET_USER" });
     };
   },
 
   validateToken: () => {
     return async (dispatch, getState) => {
+      let token;
       try {
-        const token = await AsyncStorage.getItem("tokenMyTinerary");
+        token = await AsyncStorage.getItem("tokenMyTinerary");
         if (!token) throw new Error();
         let response = await axios.get(
           "https://my-tinerary-mian.herokuapp.com/api/user/token",
@@ -232,12 +224,14 @@ const usersActions = {
           });
         }
       } catch (err) {
-        // Swal.fire({
-        //   icon: "error",
-        //   title: "Oops...",
-        //   text: "Session timed out",
-        //   footer: '<a href="">Why do I have this issue?</a>',
-        // });
+        token &&
+          Toast.show({
+            type: "error",
+            text1: "Oops!",
+            text2: "Session timed out!",
+            topOffset: 100,
+            onPress: () => Toast.hide(),
+          });
         dispatch({ type: "RESET_USER" });
         return console.log(err);
       }

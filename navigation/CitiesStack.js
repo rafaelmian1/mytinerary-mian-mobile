@@ -3,20 +3,36 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Cities from "../screens/Cities";
 import Itineraries from "../screens/Itineraries";
 import Activity from "../screens/Activity";
-import { Pressable, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import AllComments from "../screens/AllComments";
+import { BlurView } from "expo-blur";
 
 const Stack = createNativeStackNavigator();
 
 const CitiesStack = (props) => {
   useEffect(() => {
-    props.navigation.getParent().setOptions({ headerShown: false });
-    return () => props.navigation.getParent().setOptions({ headerShown: true });
+    props.route.params &&
+      props.route.params.bool &&
+      props.navigation.getParent() &&
+      props.navigation.getParent().setOptions({ headerShown: false });
+    return () =>
+      props.route.params &&
+      props.route.params.bool &&
+      props.navigation.getParent() &&
+      props.navigation.getParent().setOptions({ headerShown: true });
   }, []);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: { fontFamily: "LatoRegular", fontSize: 24 },
+        headerStyle: {
+          height: 80,
+          backgroundColor: "#d4c9be",
+        },
+      }}
+    >
       <Stack.Screen
         name="cities"
         component={Cities}
@@ -25,10 +41,16 @@ const CitiesStack = (props) => {
       <Stack.Screen
         name="itineraries"
         component={Itineraries}
-        initialParams={{ city: props.route.params.city }}
-        options={({ navigation }) => {
+        initialParams={
+          props.route.params && props.route.params.city
+            ? { city: props.route.params.city }
+            : ({ route }) => route.params.city
+        }
+        options={({ navigation, route }) => {
           return {
-            title: props.route.params.city.city,
+            title: route.params.city
+              ? route.params.city.city
+              : props.route.params.city.city,
             headerLeft: () => (
               <Pressable
                 onPress={() => {
@@ -49,6 +71,7 @@ const CitiesStack = (props) => {
         initialParams={({ route }) => route.params.itinerary}
         options={({ navigation, route }) => {
           return {
+            headerTitleStyle: { fontSize: 18 },
             title: route.params.itinerary.title,
             headerLeft: () => (
               <Pressable
@@ -67,7 +90,11 @@ const CitiesStack = (props) => {
       <Stack.Screen
         name="allComments"
         component={AllComments}
-        initialParams={props.route.params.comments}
+        initialParams={
+          props.route.params &&
+          props.route.params.bool &&
+          props.route.params.comments
+        }
         options={({ navigation }) => {
           return {
             title: "Comments",

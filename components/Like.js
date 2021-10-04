@@ -3,29 +3,29 @@ import { connect } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 
 const LikesAndComments = ({ itinerary, userId, ...props }) => {
   const [stopper, setStopper] = useState(true);
   const [likes, setLikes] = useState(itinerary.likes.likes);
   const [liked, setLiked] = useState(false);
   useEffect(() => {
-    setLiked(itinerary.likes.users.includes(userId));
+    setLiked(props.user && itinerary.likes.users.includes(userId));
     // eslint-disable-next-line
-  }, [userId]);
+  }, [userId, props.user]);
+
   const clickHandler = async (bool) => {
     if (!stopper) {
       return false;
     }
     if (!props.user) {
-      //   toast.error("You must be logged in to like the itineraries", {
-      //     position: "top-right",
-      //     autoClose: 3000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: false,
-      //     draggable: true,
-      //     progress: undefined,
-      //   });
+      Toast.show({
+        type: "info",
+        text1: "Oops!",
+        text2: "You must be logged in to like a post",
+        topOffset: 100,
+        onPress: () => Toast.hide(),
+      });
       return false;
     }
     setStopper(false);

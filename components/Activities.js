@@ -18,8 +18,6 @@ const Activities = ({ id, ...props }) => {
   return (
     <View style={styles.container}>
       <Carousel
-        layout={"default"}
-        layoutCardOffset={18}
         hasParallaxImages={true}
         data={act || []}
         renderItem={({ item, index }, parallaxProps) => {
@@ -35,7 +33,7 @@ const Activities = ({ id, ...props }) => {
         }}
         sliderHeight={Dimensions.get("window").width}
         sliderWidth={Dimensions.get("window").width}
-        itemWidth={Dimensions.get("window").width - 60}
+        itemWidth={Dimensions.get("window").width - 50}
       />
     </View>
   );
@@ -51,6 +49,7 @@ export default connect(mapStateToProps)(Activities);
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    flex: 1,
+    marginTop: 10,
   },
 });

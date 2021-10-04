@@ -1,4 +1,5 @@
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const citiesActions = {
   getCities: (props) => {
@@ -12,17 +13,15 @@ const citiesActions = {
         }
         dispatch({ type: "GET_CITIES", payload: response.data.response });
       } catch (err) {
-        // toast.error("We're doing some maintenance, please try later!", {
-        //   position: "top-right",
-        //   autoClose: 2000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: false,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "We're doing some maintenance, please try later!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
         console.error(err.message);
-        // props.history.push("/error");
+        props.navigation.navigate("error");
       }
     };
   },
@@ -38,17 +37,15 @@ const citiesActions = {
         }
         dispatch({ type: "GET_CITY", payload: response.data.response });
       } catch (err) {
-        // toast.error("We're doing some maintenance, please try later!", {
-        //   position: "top-right",
-        //   autoClose: 2000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: false,
-        //   draggable: true,
-        //   progress: undefined,
-        // });
+        Toast.show({
+          type: "error",
+          text1: "Oops!",
+          text2: "We're doing some maintenance, please try later!",
+          topOffset: 100,
+          onPress: () => Toast.hide(),
+        });
         console.error(err.message);
-        // props.history.push("/error");
+        props.navigation.navigate("error");
       }
     };
   },

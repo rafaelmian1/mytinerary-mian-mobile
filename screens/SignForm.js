@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 import {
   ScrollView,
   TextInput,
@@ -13,7 +19,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignForm = (props) => {
-  const signin = props.route.name == "signin";
+  const [signin, setSignin] = useState(props.route.name == "signin");
   const [errors, setErrors] = useState([]);
   const [secure, setSecure] = useState(true);
   const [open, setOpen] = useState(false);
@@ -38,14 +44,12 @@ const SignForm = (props) => {
   }, [value]);
 
   const signUpHandler = async (e) => {
-    let errors = await props.signUp(user);
+    let errors = await props.signUp(user, props);
     errors && setErrors(errors.map((err) => err.field));
   };
-  console.log(errors);
   const getStorage = async () => {
     try {
       let token = await AsyncStorage.getItem("tokenMyTinerary");
-      console.log(token);
     } catch (err) {
       console.log(err);
     }
@@ -53,132 +57,184 @@ const SignForm = (props) => {
   getStorage();
   return (
     <ScrollView>
-      <SafeAreaView style={styles.formContainer}>
-        <Text style={styles.title}>
-          {signin ? "Log In" : "Create an Account"}
-        </Text>
-        {!signin && (
-          <>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChange={(e) =>
-                  setUser({ ...user, first_name: e.nativeEvent.text.trim() })
-                }
-                // value={text}
-                placeholder="First Name"
-                placeholderTextColor="black"
-              />
-              <Ionicons
-                style={{ paddingRight: 15 }}
-                name="person-outline"
-                size={24}
-                color="black"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChange={(e) =>
-                  setUser({ ...user, last_name: e.nativeEvent.text.trim() })
-                }
-                // value={text}
-                placeholder="Last Name"
-                placeholderTextColor="black"
-              />
-              <Ionicons
-                style={{ paddingRight: 15 }}
-                name="person-outline"
-                size={24}
-                color="black"
-              />
-            </View>
-          </>
-        )}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                email: e.nativeEvent.text.toLowerCase().trim(),
-              })
-            }
-            placeholder="Email"
-            placeholderTextColor="black"
-          />
-          <Ionicons
-            style={{ paddingRight: 15 }}
-            name="ios-mail-open-outline"
-            size={24}
-            color="black"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChange={(e) => setUser({ ...user, password: e.nativeEvent.text })}
-            secureTextEntry={secure}
-            placeholder="Password"
-            placeholderTextColor="black"
-          />
-          <Ionicons
-            style={{ paddingRight: 15 }}
-            name={secure ? "eye-outline" : "eye-off-outline"}
-            size={24}
-            color="black"
-            onPress={() => setSecure(!secure)}
-          />
-        </View>
-        {!signin && (
-          <>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChange={(e) => setUser({ ...user, img: e.nativeEvent.text })}
-                placeholder="Profile picture URL (optional)"
-                placeholderTextColor="black"
-              />
-              <Ionicons
-                style={{ paddingRight: 15 }}
-                name="md-image-outline"
-                size={24}
-                color="black"
-              />
-            </View>
-            <View style={{ width: 300 }}>
-              <DropDownPicker
-                listMode="MODAL"
-                modalProps={{
-                  animationType: "fade",
-                }}
-                modalContentContainerStyle={styles.selectModal}
-                placeholder="Select your country"
-                style={{ ...styles.inputContainer, paddingLeft: 22 }}
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-              />
-            </View>
-          </>
-        )}
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor="white"
-          style={styles.buttonContainer}
-          onPress={() => {
-            // console.log(user);
-            signin ? props.logIn(user) : signUpHandler();
+      <View style={styles.formContainer}>
+        <View
+          style={{
+            alignItems: "center",
+            backgroundColor: "white",
+            width: Dimensions.get("window").width - 40,
+            padding: 32,
+            borderRadius: 40,
+            borderWidth: 1,
+            borderColor: "black",
           }}
         >
-          <Text style={styles.button}>
-            {signin ? "Log In" : "Create an Account"}
+          <Text style={styles.title}>
+            {signin ? "Welcome back!\nEnjoy MyTinerary " : "Register now!"}
           </Text>
-        </TouchableHighlight>
-      </SafeAreaView>
+          {!signin && (
+            <>
+              <View
+                style={{
+                  ...styles.inputContainer,
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  onChange={(e) =>
+                    setUser({ ...user, first_name: e.nativeEvent.text.trim() })
+                  }
+                  placeholder="First Name"
+                  placeholderTextColor="black"
+                />
+                <Ionicons
+                  style={{ paddingRight: 15 }}
+                  name="person-outline"
+                  size={24}
+                  color={errors.includes("country") ? "red" : "black"}
+                />
+              </View>
+              <View
+                style={{
+                  ...styles.inputContainer,
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  onChange={(e) =>
+                    setUser({ ...user, last_name: e.nativeEvent.text.trim() })
+                  }
+                  placeholder="Last Name"
+                  placeholderTextColor="black"
+                />
+                <Ionicons
+                  style={{ paddingRight: 15 }}
+                  name="person-outline"
+                  size={24}
+                  color={errors.includes("country") ? "red" : "black"}
+                />
+              </View>
+            </>
+          )}
+          <View
+            style={{
+              ...styles.inputContainer,
+            }}
+          >
+            <TextInput
+              style={styles.input}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  email: e.nativeEvent.text.toLowerCase().trim(),
+                })
+              }
+              autoCapitalize="none"
+              placeholder="Email"
+              placeholderTextColor="black"
+            />
+            <Ionicons
+              style={{ paddingRight: 15 }}
+              name="ios-mail-open-outline"
+              size={24}
+              color={errors.includes("country") ? "red" : "black"}
+            />
+          </View>
+          <View
+            style={{
+              ...styles.inputContainer,
+            }}
+          >
+            <TextInput
+              style={styles.input}
+              onChange={(e) =>
+                setUser({ ...user, password: e.nativeEvent.text })
+              }
+              secureTextEntry={secure}
+              placeholder="Password"
+              placeholderTextColor="black"
+            />
+            <Ionicons
+              style={{ paddingRight: 15 }}
+              name={secure ? "eye-outline" : "eye-off-outline"}
+              size={24}
+              color={errors.includes("country") ? "red" : "black"}
+              onPress={() => setSecure(!secure)}
+            />
+          </View>
+          {!signin && (
+            <>
+              <View
+                style={{
+                  ...styles.inputContainer,
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  onChange={(e) =>
+                    setUser({ ...user, img: e.nativeEvent.text })
+                  }
+                  placeholder="Profile picture URL (optional)"
+                  placeholderTextColor="black"
+                />
+                <Ionicons
+                  style={{ paddingRight: 15 }}
+                  name="md-image-outline"
+                  size={24}
+                  color={errors.includes("country") ? "red" : "black"}
+                />
+              </View>
+              <View style={{ width: 300 }}>
+                <DropDownPicker
+                  listMode="MODAL"
+                  modalProps={{
+                    animationType: "fade",
+                  }}
+                  modalContentContainerStyle={styles.selectModal}
+                  placeholder="Select your country"
+                  style={{
+                    ...styles.inputContainer,
+                    paddingLeft: 22,
+                    borderColor: errors.includes("country") ? "red" : "black",
+                    backgroundColor: "transparent",
+                  }}
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
+                />
+              </View>
+            </>
+          )}
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor="rgba(255,255,255,0.2)"
+            style={styles.buttonContainer}
+            onPress={() => {
+              signin ? props.logIn(user, props) : signUpHandler();
+            }}
+          >
+            <Text style={styles.button}>
+              {signin ? "Log In " : "Create an Account "}
+            </Text>
+          </TouchableHighlight>
+          <Text style={{ fontSize: 14, color: "black" }}>
+            {!signin ? "Already have an account? " : "Don't have an account? "}
+            <Text
+              onPress={() => setSignin(!signin)}
+              style={{
+                color: "black",
+                fontWeight: "bold",
+                textDecorationLine: "underline",
+              }}
+            >
+              {!signin ? "Log In" : "Create an Account"}
+            </Text>
+          </Text>
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -191,14 +247,27 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   logIn: usersActions.logIn,
   signUp: usersActions.signUp,
-  getCountries: usersActions.getCountries,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignForm);
 
 const styles = StyleSheet.create({
-  formContainer: { flex: 1, alignItems: "center" },
-  title: { fontSize: 30, fontFamily: "Lato", color: "red", marginVertical: 40 },
+  formContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    height: Dimensions.get("window").height - 80,
+    backgroundColor: "#d4c1ae",
+  },
+  title: {
+    fontSize: 36,
+    fontFamily: "LatoRegular",
+    color: "black",
+    textShadowColor: "white",
+    textShadowOffset: { height: 0.5, width: 0.5 },
+    textShadowRadius: 5,
+    marginBottom: 40,
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -218,20 +287,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    width: 100,
+    width: 200,
     padding: 10,
-    marginTop: 30,
-    backgroundColor: "#e6e1dd",
+    marginVertical: 30,
+    backgroundColor: "black",
     borderRadius: 25,
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWidth: 1,
   },
   button: {
-    color: "black",
+    color: "white",
     fontFamily: "Lato",
     fontSize: 20,
     textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { height: 2, width: 2 },
+    textShadowRadius: 5,
   },
 });
 

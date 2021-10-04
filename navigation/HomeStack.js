@@ -2,8 +2,9 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screens/Home";
 import { AntDesign } from "@expo/vector-icons";
-import { Pressable, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import CitiesStack from "./CitiesStack";
+import { BlurView } from "expo-blur";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,13 +19,14 @@ const HomeStack = () => {
       <Stack.Screen
         name="citiesStack"
         component={CitiesStack}
-        params={({ route }) => {
-          return { bool: route.params.bool };
-        }}
         options={({ navigation }) => {
           return {
-            title: "Cities",
-            headerTitle: "Explore all our Cities!",
+            headerTitleStyle: { fontFamily: "LatoRegular", fontSize: 24 },
+            headerStyle: {
+              height: 80,
+              backgroundColor: "#d4c9be",
+            },
+            title: "Explore all our Cities!",
             headerLeft: () => (
               <Pressable
                 onPress={() => {

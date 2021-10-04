@@ -1,170 +1,82 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Dimensions,
   Image,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
+
 import { connect } from "react-redux";
 import usersActions from "../redux/actions/usersActions";
-import EditDeleteButtons from "./EditDeleteButtons";
+import ConfirmModal from "./ConfirmModal";
+import EditDeleteIcons from "./EditDeleteIcons";
 
-const Comment = ({ comm, id, userId, ...props }) => {
-  const [com, setCom] = useState(comm.comment);
-  const [comment, setComment] = useState(comm.comment);
+const Comment = ({ comm, id, userId, comments, ...props }) => {
+  const [com, setCom] = useState("");
+  const [comment, setComment] = useState("");
   const [editConfirm, setEditConfirm] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  return (
-    <View style={{ height: 65, flexDirection: "row" }}>
-      {comm && (
-        <View style={{ height: 50, marginBottom: 30 }}>
-          <Image
-            source={{
-              uri: comm.user.img,
-            }}
-            style={{
-              width: 50,
-              marginHorizontal: 10,
-              height: 50,
-              marginHorizontal: 10,
-              borderRadius: 25,
-            }}
+  useEffect(() => {
+    setCom(comments.find((c) => c._id === comm._id).comment);
+    setComment(comments.find((c) => c._id === comm._id).comment);
+  }, [comments]);
+
+  const Avatar = () => (
+    <View style={{ height: 50 }}>
+      <Image
+        source={{
+          uri: comm.user.img,
+        }}
+        style={styles.avatar}
+      />
+    </View>
+  );
+
+  const CoreComment = () => (
+    <View style={styles.inputContainer}>
+      <View style={styles.inputContainerHeader}>
+        <Text style={styles.avatarText}>
+          {comm.user.first_name + " " + comm.user.last_name}
+        </Text>
+        {props.user && comm.user._id === userId && (
+          <EditDeleteIcons
+            editConfirm={editConfirm}
+            com={com}
+            comment={comment}
+            setCom={setCom}
+            setEditConfirm={setEditConfirm}
           />
-        </View>
-      )}
-      <View style={styles.inputContainer}>
-        <View
-          style={{
-            width: "80%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text style={{ fontWeight: "bold" }}>
-            {comm.user.first_name + " " + comm.user.last_name}
-          </Text>
-          {props.user && comm.user._id === userId && (
-            <View style={{ flexDirection: "row" }}>
-              {!editConfirm ? (
-                <>
-                  <Ionicons
-                    name="pencil-outline"
-                    size={24}
-                    color="black"
-                    style={{ marginHorizontal: 15 }}
-                    onPress={() => setEditConfirm(!editConfirm)}
-                  />
-                  <Ionicons
-                    name="trash-outline"
-                    size={24}
-                    color="black"
-                    onPress={() => setModalVisible(true)}
-                  />
-                </>
-              ) : (
-                <>
-                  <Ionicons
-                    name="checkmark-outline"
-                    size={24}
-                    color="black"
-                    style={{ marginHorizontal: 15 }}
-                    onPress={() => {
-                      setEditConfirm(!editConfirm);
-                      com !== comment &&
-                        props.comment(id, "update", comment, com);
-                    }}
-                  />
-                  <Ionicons
-                    name="close-outline"
-                    size={24}
-                    color="black"
-                    onPress={() => {
-                      setEditConfirm(!editConfirm);
-                      setCom(comment);
-                    }}
-                  />
-                </>
-              )}
-            </View>
-          )}
-        </View>
-        {!editConfirm ? (
-          <Text
-            style={{
-              width: "80%",
-              marginLeft: 10,
-            }}
-          >
-            {com}
-          </Text>
-        ) : (
-          <TextInput
-            style={{
-              borderWidth: 1,
-              borderRadius: 5,
-              padding: 4,
-              width: "80%",
-            }}
-            value={com}
-            onChangeText={(text) => setCom(text)}
-          ></TextInput>
         )}
       </View>
+      {!editConfirm ? (
+        <Text style={styles.commentStyle}>{com}</Text>
+      ) : (
+        <TextInput
+          style={styles.commentEditingStyle}
+          value={com}
+          onChangeText={(text) => setCom(text)}
+        ></TextInput>
+      )}
+    </View>
+  );
+  const background = {
+    backgroundColor:
+      props.user && comm.user._id === userId ? "#ede6df" : "#bfb5aa",
+  };
 
-      {/* <EditDeleteButtons
-          authorized={comm.user._id === userId}
-          functions={[editConfirmButton, deleteComment]}
-        /> */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              Are you sure you want to delete you comment?
-            </Text>
-            <View style={{ flexDirection: "row" }}>
-              <Pressable
-                style={[
-                  styles.button,
-                  styles.buttonClose,
-                  { width: 50, marginHorizontal: 10 },
-                ]}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  props.comment(id, "delete", com);
-                }}
-              >
-                <Text style={styles.textStyle}>Yes</Text>
-              </Pressable>
-
-              <Pressable
-                style={[
-                  styles.button,
-                  styles.buttonClose,
-                  { width: 50, marginHorizontal: 10 },
-                ]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>No</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+  return (
+    <View style={[styles.mainContainer, background]}>
+      <Avatar />
+      <CoreComment />
+      <ConfirmModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        id={id}
+        com={com}
+      />
     </View>
   );
 };
@@ -172,6 +84,7 @@ const Comment = ({ comm, id, userId, ...props }) => {
 const mapStateToProps = (state) => {
   return {
     user: state.users.user,
+    comments: state.activities.comments,
   };
 };
 
@@ -183,49 +96,58 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    width: Dimensions.get("window").width - 10,
-  },
-
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
+  mainContainer: {
+    minHeight: 70,
+    flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
     elevation: 5,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "transparent",
+    borderRadius: 25,
+    marginVertical: 4,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  avatar: {
+    width: 50,
+    marginHorizontal: 10,
+    height: 50,
+    borderRadius: 25,
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
+  inputContainer: {
+    width: Dimensions.get("window").width * 0.8,
   },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+  inputContainerHeader: {
+    marginRight: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    height: 25,
   },
-  textStyle: {
-    color: "white",
+  avatarText: {
     fontWeight: "bold",
-    textAlign: "center",
+    fontFamily: "LatoRegular",
+    fontSize: 13,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  commentStyle: {
+    width: "80%",
+    marginLeft: 10,
+    marginTop: 5,
+    fontSize: 16,
+    fontFamily: "LatoRegular",
+  },
+  commentEditingStyle: {
+    borderBottomWidth: 1,
+    padding: 3,
+    fontSize: 15,
+    opacity: 0.6,
+    borderBottomColor: "rgba(0,0,0,0.6)",
+    paddingVertical: 0,
+    width: "80%",
   },
 });

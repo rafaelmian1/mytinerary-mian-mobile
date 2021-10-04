@@ -12,7 +12,7 @@ const Activity = (props) => {
         ListFooterComponent={
           <Comments itinerary={itinerary} userId={userId} {...props} />
         }
-        ListFooterComponentStyle={{ height: 280 }}
+        ListFooterComponentStyle={styles.commentsBox}
       />
     </View>
   );
@@ -20,4 +20,7 @@ const Activity = (props) => {
 
 export default Activity;
 
-const styles = StyleSheet.create({ container: { flex: 1 } });
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#b9a698" },
+  // commentsBox: { minHeight: 2 },
+});

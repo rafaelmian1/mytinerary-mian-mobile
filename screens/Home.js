@@ -7,20 +7,15 @@ import {
   Text,
   Dimensions,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
-import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
 import Carousel from "react-native-snap-carousel";
 import carouselActions from "../redux/actions/carouselActions";
 import Slide from "../components/Slide";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 const Home = (props) => {
-  const [loaded] = useFonts({
-    Lato: require("../assets/Lato-Light.ttf"),
-  });
-
   const carouselRef = useRef(null);
 
   useEffect(() => {
@@ -28,17 +23,13 @@ const Home = (props) => {
     // return () => props.navigation.reset();
   }, []);
 
-  if (!loaded) {
-    return <AppLoading />;
-  }
-
   const data =
     props.slides.length !== 0
       ? [...props.slides[0], ...props.slides[1], ...props.slides[2]]
       : [];
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: "#b9a698" }}>
       <ScrollView>
         <ImageBackground
           source={require("../assets/fondo.jpg")}
@@ -59,10 +50,13 @@ const Home = (props) => {
 
             <TouchableHighlight
               activeOpacity={0.8}
-              underlayColor="white"
+              underlayColor="#b9a698"
               style={styles.buttonContainer}
               onPress={() => {
-                props.navigation.push("citiesStack", { bool: true });
+                props.navigation.navigate("citiesStack", {
+                  screen: "cities",
+                  bool: true,
+                });
               }}
             >
               <Text style={styles.button}>Explore</Text>
@@ -75,12 +69,14 @@ const Home = (props) => {
             Popular MyTineraries
           </Text>
         </View>
-        {props.slides.length !== 0 && (
+        {props.slides.length === 0 ? (
+          <View style={styles.container}>
+            <ActivityIndicator size="large" color="#ff7f50" />
+          </View>
+        ) : (
           <View style={styles.container}>
             <Carousel
               ref={carouselRef}
-              layout={"default"}
-              layoutCardOffset={18}
               hasParallaxImages={true}
               data={data}
               renderItem={({ item, index }, parallaxProps) => {
@@ -121,8 +117,8 @@ const styles = StyleSheet.create({
   },
   brandContainer: {
     width: "100%",
-    marginTop: "25%",
-    paddingHorizontal: 5,
+    marginTop: "15%",
+    paddingHorizontal: 3,
   },
   sloganContainer: {
     width: "75%",
@@ -138,14 +134,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginVertical: 30,
+    marginTop: 30,
   },
   buttonContainer: {
     width: 200,
     padding: 10,
     marginLeft: "15%",
     marginTop: 30,
-    backgroundColor: "#e6e1dd",
+    backgroundColor: "#d4c9be",
     borderRadius: 25,
     borderStyle: "solid",
     borderColor: "black",

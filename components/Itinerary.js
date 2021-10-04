@@ -33,12 +33,23 @@ const Itinerary = ({ itinerary, index, ...props }) => {
   return (
     <View
       style={{
-        height: 300,
-        width: Dimensions.get("window").width,
+        flex: 1,
+        width: Dimensions.get("window").width - 10,
         backgroundColor: "white",
-        flexDirection: "row",
+
         alignItems: "center",
-        marginVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 6,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 6,
+        elevation: 10,
+        borderWidth: 2,
+        borderColor: "black",
+        borderRadius: 15,
+        marginVertical: 15,
       }}
     >
       <Image
@@ -46,15 +57,17 @@ const Itinerary = ({ itinerary, index, ...props }) => {
           uri: "https://my-tinerary-mian.herokuapp.com" + itinerary.img,
         }}
         style={{
-          width: Dimensions.get("window").width * 0.35,
+          width: Dimensions.get("window").width - 20,
           height: 290,
-          marginHorizontal: Dimensions.get("window").width * 0.02,
+          margin: 3,
+          borderRadius: 15,
         }}
       />
       <View
         style={{
-          height: "80%",
-          width: Dimensions.get("window").width * 0.6,
+          height: "100%",
+          width: Dimensions.get("window").width * -6,
+          paddingVertical: 10,
         }}
       >
         <View
@@ -76,18 +89,18 @@ const Itinerary = ({ itinerary, index, ...props }) => {
               borderRadius: 25,
             }}
           />
-          <Text>{itinerary.user.name}</Text>
+          <Text style={styles.text}>{itinerary.user.name}</Text>
           <Like itinerary={itinerary} userId={userId} {...props} />
         </View>
         <View
           style={{
             paddingHorizontal: 10,
-            width: Dimensions.get("window").width * 0.6,
+            width: Dimensions.get("window").width - 20,
           }}
         >
-          <Text>{itinerary.title}</Text>
-          <Text>{itinerary.description}</Text>
-          <Text>
+          <Text style={styles.text2}>{itinerary.title}</Text>
+          <Text style={styles.text3}>{itinerary.description}</Text>
+          <Text style={styles.text3}>
             {itinerary.hashtags.map((ht) => (
               <Text key={ht}>#{ht} </Text>
             ))}
@@ -107,11 +120,11 @@ const Itinerary = ({ itinerary, index, ...props }) => {
               />
             ))}
           </View>
-          <Text>🕔 {itinerary.duration} hs</Text>
+          <Text style={styles.text2}>🕔 {itinerary.duration} hs</Text>
         </View>
         <TouchableHighlight
           activeOpacity={0.8}
-          underlayColor="white"
+          underlayColor="#b9a698"
           style={styles.buttonContainer}
           onPress={() => {
             handleClick() &&
@@ -149,11 +162,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#b9a698",
   },
   buttonContainer: {
-    width: "50%",
+    width: 100,
     padding: 5,
-    marginLeft: "25%",
-    marginTop: 30,
-    backgroundColor: "#e6e1dd",
+    alignSelf: "center",
+    // position: "absolute",
+    // bottom: 10,
+    backgroundColor: "#d4c9be",
     borderRadius: 25,
     borderStyle: "solid",
     borderColor: "black",
@@ -161,7 +175,7 @@ const styles = StyleSheet.create({
   },
   button: {
     color: "black",
-    fontFamily: "Lato",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     textAlign: "center",
   },
@@ -200,10 +214,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginVertical: 5,
   },
-  input: {
-    height: "100%",
-    margin: 12,
-    padding: 10,
-    flex: 1,
+  text: {
+    fontFamily: "LatoRegular",
+    fontWeight: "bold",
+    fontSize: 15,
   },
+  text2: { fontFamily: "LatoRegular", fontSize: 15, marginVertical: 10 },
+  text3: { fontFamily: "LatoRegular", fontSize: 13, marginBottom: 10 },
 });

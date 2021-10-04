@@ -13,7 +13,7 @@ const carouselActions = {
         dispatch({ type: "GET_SLIDES", payload: response.data.response });
       } catch (err) {
         console.error(err.message);
-        props.navigation.navigate("home");
+        props.navigation.navigate("error");
       }
     };
   },

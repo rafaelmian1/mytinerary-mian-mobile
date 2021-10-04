@@ -1,5 +1,13 @@
-import React, { useEffect } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 import citiesActions from "../redux/actions/citiesActions";
@@ -7,14 +15,15 @@ import itinerariesActions from "../redux/actions/itinerariesActions";
 import Itinerary from "../components/Itinerary";
 
 const Itineraries = (props) => {
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     props.navigation.getParent().setOptions({ headerShown: false });
     return () => props.navigation.getParent().setOptions({ headerShown: true });
   }, []);
-
   useEffect(() => {
     let myListener = props.navigation.addListener("focus", () => {
       props.getItineraries(props.route.params.city._id);
+      setLoading(false);
     });
     return () => {
       props.navigation.removeListener(myListener);
@@ -45,6 +54,27 @@ const Itineraries = (props) => {
       <FlatList
         data={props.itineraries}
         keyExtractor={(item) => item._id}
+        ListEmptyComponent={
+          <View
+            style={{
+              ...styles.container,
+              marginTop: Dimensions.get("window").height * 0.15,
+            }}
+          >
+            <ActivityIndicator size="large" color="#ff7f50" />
+          </View>
+        }
+        ListFooterComponent={
+          props.itineraries &&
+          props.itineraries.length === 0 && (
+            <ImageBackground
+              source={{
+                uri: "https://my-tinerary-mian.herokuapp.com/assets/oops.png",
+              }}
+              style={styles.oops}
+            />
+          )
+        }
         ListHeaderComponent={headerComponent}
         renderItem={({ item, index }) => {
           return (
@@ -99,11 +129,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   banner: {
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width - 10,
     height: Dimensions.get("window").width - 140,
-    marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: "white",
+    borderColor: "black",
+    overflow: "hidden",
+    borderRadius: 15,
+    padding: 5,
     marginVertical: 15,
   },
   brand: {
@@ -120,7 +152,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
-  label: { fontFamily: "Lato", fontSize: 25, textAlign: "center" },
+  label: { fontFamily: "LatoRegular", fontSize: 30, textAlign: "center" },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -135,5 +167,11 @@ const styles = StyleSheet.create({
     margin: 12,
     padding: 10,
     flex: 1,
+  },
+  oops: {
+    height: 100,
+    width: 260,
+    marginTop: 50,
+    alignSelf: "center",
   },
 });

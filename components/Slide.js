@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, Pressable, StyleSheet, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from "react-native";
 import { ParallaxImage } from "react-native-snap-carousel";
 
 const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
@@ -17,11 +24,7 @@ const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
   });
   if (activity) {
     return (
-      <Pressable
-        key={"slide" + index}
-        onLongPress={() => setLoop(true)}
-        onPressOut={() => setLoop(false)}
-      >
+      <Pressable key={"slide" + index} onPress={() => setLoop(!loop)}>
         <View style={styles.item}>
           <ParallaxImage
             source={{
@@ -34,10 +37,13 @@ const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
           />
           {!loop && (
             <View style={styles.textContainer}>
-              <Text style={styles.brand} numberOfLines={2}>
+              <Text style={{ ...styles.brand, fontSize: 24 }} numberOfLines={2}>
                 {item.name}
               </Text>
-              <Text style={{ ...styles.brand, fontSize: 20 }} numberOfLines={2}>
+              <Text
+                style={{ ...styles.brand, fontSize: 18, paddingTop: 0 }}
+                numberOfLines={2}
+              >
                 {item.description}
               </Text>
             </View>
@@ -49,7 +55,7 @@ const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate("citiesStack", {
+        navigation.push("citiesStack", {
           screen: "itineraries",
           bool: true,
           city: item,
@@ -72,11 +78,21 @@ const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
           parallaxFactor={0.4}
           {...parallaxProps}
         />
-        <View style={styles.textContainer}>
-          <Text style={styles.brand} numberOfLines={2}>
-            {item.city}
-          </Text>
-        </View>
+        {!loop && (
+          <>
+            <View style={styles.textContainer}>
+              <Text style={styles.brand} numberOfLines={2}>
+                {item.city}
+              </Text>
+              <Image
+                source={{
+                  uri: "https://static.thenounproject.com/png/949830-200.png",
+                }}
+                style={styles.pressable}
+              />
+            </View>
+          </>
+        )}
       </View>
     </Pressable>
   );
@@ -86,8 +102,7 @@ export default Slide;
 const styles = StyleSheet.create({
   brand: {
     fontFamily: "Lato",
-    fontWeight: "500",
-    color: "white",
+    color: "black",
     fontSize: 40,
     padding: 8,
     marginLeft: 15,
@@ -96,12 +111,33 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "rgba(212, 201, 190, 075)",
+  },
+  pressable: {
+    width: 50,
+    height: 50,
+    // position: "absolute",
+    // top: 5,
+    // right: 5,
   },
   item: {
-    height: Dimensions.get("window").width - 60,
+    flex: 1,
+    height: Dimensions.get("window").width - 80,
     borderRadius: 20,
     overflow: "hidden",
+    marginBottom: 10,
+    borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 6,
   },
   imageContainer: {
     flex: 1,
