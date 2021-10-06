@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   brand: {
     fontFamily: "Lato",
     fontWeight: "500",
-    color: "white",
+    color: "black",
     fontSize: 40,
     padding: 8,
     marginLeft: 15,
@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    alignItems: "center",
+    backgroundColor: "rgba(212, 201, 190, 0.8)",
+    flexDirection: "row",
+    borderTopWidth: 2,
   },
 });

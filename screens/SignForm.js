@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import {
   ScrollView,
   TextInput,
   TouchableHighlight,
 } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import usersActions from "../redux/actions/usersActions";

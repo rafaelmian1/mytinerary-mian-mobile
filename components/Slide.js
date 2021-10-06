@@ -5,7 +5,7 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
-  Image,
+  ImageBackground,
 } from "react-native";
 import { ParallaxImage } from "react-native-snap-carousel";
 
@@ -80,16 +80,10 @@ const Slide = ({ item, index, parallaxProps, navigation, activity }) => {
         />
         {!loop && (
           <>
-            <View style={styles.textContainer}>
+            <View style={{ ...styles.textContainer, flexDirection: "row" }}>
               <Text style={styles.brand} numberOfLines={2}>
                 {item.city}
               </Text>
-              <Image
-                source={{
-                  uri: "https://static.thenounproject.com/png/949830-200.png",
-                }}
-                style={styles.pressable}
-              />
             </View>
           </>
         )}
@@ -111,25 +105,19 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     bottom: 0,
-    flexDirection: "row",
+    borderTopWidth: 2,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(212, 201, 190, 075)",
-  },
-  pressable: {
-    width: 50,
-    height: 50,
-    // position: "absolute",
-    // top: 5,
-    // right: 5,
+    backgroundColor: "rgba(212, 201, 190, 0.8)",
   },
   item: {
     flex: 1,
     height: Dimensions.get("window").width - 80,
-    borderRadius: 20,
     overflow: "hidden",
+    borderRadius: 20,
     marginBottom: 10,
     borderWidth: 2,
+    borderColor: "black",
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -141,9 +129,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
-    backgroundColor: "white",
-    borderRadius: 8,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

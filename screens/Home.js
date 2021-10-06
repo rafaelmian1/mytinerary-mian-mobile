@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -14,9 +14,11 @@ import Carousel from "react-native-snap-carousel";
 import carouselActions from "../redux/actions/carouselActions";
 import Slide from "../components/Slide";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 
 const Home = (props) => {
   const carouselRef = useRef(null);
+  const [firstScroll, setFirstScroll] = useState(false);
 
   useEffect(() => {
     props.slides.length === 0 && props.getSlides(props);
@@ -28,9 +30,21 @@ const Home = (props) => {
       ? [...props.slides[0], ...props.slides[1], ...props.slides[2]]
       : [];
 
+  const handleFirstScroll = () => {
+    if (firstScroll) return false;
+    Toast.show({
+      type: "info",
+      // text1: "Check it!",
+      text2: "You can hold the carousel images to change them!",
+      topOffset: 100,
+      onPress: () => Toast.hide(),
+    });
+    setFirstScroll(true);
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: "#b9a698" }}>
-      <ScrollView>
+      <ScrollView onScrollEndDrag={() => !firstScroll && handleFirstScroll()}>
         <ImageBackground
           source={require("../assets/fondo.jpg")}
           style={styles.ImageBackground}

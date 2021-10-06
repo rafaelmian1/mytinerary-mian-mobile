@@ -49,7 +49,7 @@ const App = () => {
       <InfoToast
         {...rest}
         text1Style={{ fontFamily: "Lato", fontSize: 20 }}
-        text2Style={{ fontFamily: "Lato", fontSize: 15, color: "black" }}
+        text2Style={{ fontFamily: "Lato", fontSize: 16, color: "black" }}
         contentContainerStyle={{ padding: 5 }}
       />
     ),

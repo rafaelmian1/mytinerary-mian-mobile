@@ -2,9 +2,8 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screens/Home";
 import { AntDesign } from "@expo/vector-icons";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, View } from "react-native";
 import CitiesStack from "./CitiesStack";
-import { BlurView } from "expo-blur";
 
 const Stack = createNativeStackNavigator();
 
